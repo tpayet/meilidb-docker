@@ -1,27 +1,23 @@
 # Compile
+FROM    rust:latest AS compiler
 
-FROM rust:latest AS compile
+RUN     apt update -y
+RUN     apt install cmake -y
 
-RUN apt update -y
-
-RUN apt install cmake -y
-
-RUN git clone --single-branch --branch create-server-example https://github.com/qdequele/MeiliDB.git
-
+RUN     git clone --single-branch --branch create-server-example https://github.com/qdequele/MeiliDB.git
 WORKDIR /MeiliDB
 
-RUN cargo build --release --example http-server
+RUN     cargo build --release --example http-server
 
 
 # Run
+FROM    debian
 
-FROM debian
+COPY    --from=compiler /MeiliDB/target/release/examples/http-server .
+COPY    --from=compiler /MeiliDB/misc/fr.stopwords.txt .
 
-COPY --from=compile /MeiliDB/target/release/examples/http-server .
-COPY --from=compile /MeiliDB/misc/fr.stopwords.txt .
+EXPOSE  8080
+ENV     RUST_LOG http_server
 
-EXPOSE 8080
-ENV RUST_LOG http_server
-
-RUN mkdir -p /var/data
-CMD ["./http-server", "/var/data", "--stop-words", "fr.stopwords.txt", "-l", "0.0.0.0:8080"]
+RUN     mkdir -p /var/data
+CMD     ["./http-server", "/var/data", "--stop-words", "fr.stopwords.txt", "-l", "0.0.0.0:8080"]
