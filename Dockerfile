@@ -11,7 +11,7 @@ RUN     cargo build --release --example http-server
 
 
 # Run
-FROM    debian
+FROM    debian:latest
 
 COPY    --from=compiler /MeiliDB/target/release/examples/http-server .
 COPY    --from=compiler /MeiliDB/misc/fr.stopwords.txt .

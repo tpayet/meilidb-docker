@@ -2,6 +2,14 @@
 
 ## Usage
 
+### Dockerfile
+```bash
+$> docker build . -t meilidb
+$> docker run --rm -it -p 8080:8080 meilidb
+```
+
+### MeiliDB
+
 #### Create index
 ```bash
 $> curl -X "POST" "http://localhost:8080/create" \
@@ -20,4 +28,3 @@ $> curl -X "PUT" "http://localhost:8080/index/simple/ingest" \
 ```bash
 $> curl "http://localhost:8080/index/simple/search?q=pata&limit=20"
 ```
-
