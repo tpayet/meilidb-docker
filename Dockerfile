@@ -4,7 +4,7 @@ FROM    rust:latest AS compiler
 RUN     apt update -y
 RUN     apt install cmake -y
 
-RUN     git clone --single-branch --branch create-server-example https://github.com/qdequele/MeiliDB.git
+RUN     git clone https://github.com/Kerollmops/MeiliDB.git
 WORKDIR /MeiliDB
 
 RUN     cargo build --release --example http-server
